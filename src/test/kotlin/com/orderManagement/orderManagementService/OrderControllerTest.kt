@@ -1,8 +1,5 @@
-package com.orderManagement.orderManagementService.controller
+package com.orderManagement.orderManagementService
 
-import com.orderManagement.orderManagementService.OrderController
-import com.orderManagement.orderManagementService.OrderDetails
-import com.orderManagement.orderManagementService.OrderService
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired

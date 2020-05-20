@@ -30,6 +30,7 @@ dependencies {
 	}
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("io.mockk:mockk:1.10.0")
+	testImplementation("io.kotlintest:kotlintest-runner-junit5:3.1.10")
 }
 
 tasks.withType<Test> {

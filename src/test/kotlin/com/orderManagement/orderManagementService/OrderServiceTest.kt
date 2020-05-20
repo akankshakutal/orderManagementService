@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import reactor.core.publisher.Mono
 
 class OrderServiceTest {
-    private val prospect = Prospect("itemName", 3, "paymentMode", "email")
+    private val prospect = Prospect("itemName", 3, "paymentMode", "email", "PLACED")
     private val prospectRepository = mockk<ProspectRepository> {
         every { save<Prospect>(any()) } returns Mono.just(prospect)
     }
@@ -21,7 +21,7 @@ class OrderServiceTest {
         orderService.order(orderDetails)
 
         verify(exactly = 1) {
-            prospectRepository.save(Prospect("itemName", 3, "paymentMode", "email"))
+            prospectRepository.save(Prospect("itemName", 3, "paymentMode", "email", "PLACED"))
         }
     }
 

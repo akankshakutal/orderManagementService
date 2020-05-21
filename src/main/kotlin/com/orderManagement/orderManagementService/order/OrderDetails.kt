@@ -7,3 +7,8 @@ enum class PaymentMode {
     CASH_ON_DELIVERY,
     UPI
 }
+
+enum class Status {
+    PLACED,
+    DELIVERED
+}

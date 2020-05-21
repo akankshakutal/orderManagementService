@@ -1,6 +1,7 @@
 package com.orderManagement.orderManagementService.prospect
 
 import com.orderManagement.orderManagementService.order.PaymentMode
+import com.orderManagement.orderManagementService.order.Status
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +16,7 @@ class ProspectRepositoryTest {
 
     @Test
     fun `save prospect`() {
-        val prospect = Prospect("itemName", 3, PaymentMode.UPI.name, "email", "PLACED")
+        val prospect = Prospect("itemName", 3, PaymentMode.UPI, "email", Status.PLACED)
         prospectRepository.save(prospect).block()
 
         val savedProspect = prospectRepository.findAll().blockFirst()

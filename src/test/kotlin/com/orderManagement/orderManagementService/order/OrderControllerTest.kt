@@ -21,7 +21,7 @@ class OrderControllerTest(@Autowired val testClient: WebTestClient) {
     private val orderDetails = OrderDetails("itemName", 3, PaymentMode.NET_BANKING, "email")
 
     @Test
-    fun `should respond with 200 OK`() {
+    fun `should respond with 200 OK for create order`() {
         testClient.post()
                 .uri("/create/order")
                 .bodyValue(orderDetails)
@@ -53,5 +53,15 @@ class OrderControllerTest(@Autowired val testClient: WebTestClient) {
 
         Mockito.verify(orderValidator, Mockito.times(1))
                 .validate(orderDetails)
+    }
+
+    @Test
+    fun `should return order details`() {
+        testClient.get()
+                .uri("/get/order")
+                .exchange()
+                .expectStatus().isOk
+
+        Mockito.verify(orderService, Mockito.times(1)).getOrder()
     }
 }

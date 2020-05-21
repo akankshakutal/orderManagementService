@@ -3,6 +3,7 @@ package com.orderManagement.orderManagementService.order
 import com.orderManagement.orderManagementService.prospect.Prospect
 import com.orderManagement.orderManagementService.prospect.ProspectRepository
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Component
@@ -17,5 +18,11 @@ class OrderService(val prospectRepository: ProspectRepository) {
         }.map {
             OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, Status.DELIVERED)
         }
+    }
+
+    fun getOrder(): Flux<OrderResponse> {
+        return prospectRepository
+                .findAll()
+                .map { OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, it.status) }
     }
 }

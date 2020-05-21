@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier.withVirtualTime
 
@@ -13,6 +14,7 @@ class OrderServiceTest {
     private val prospect = Prospect("itemName", 3, PaymentMode.NET_BANKING, "email", Status.PLACED)
     private val prospectRepository = mockk<ProspectRepository> {
         every { save<Prospect>(any()) } returns Mono.just(prospect)
+        every { findAll() } returns Flux.just(prospect)
     }
     private val orderService = OrderService(prospectRepository)
 
@@ -28,4 +30,12 @@ class OrderServiceTest {
                 }.verifyComplete()
     }
 
+    @Test
+    fun `should get all the orders`() {
+        withVirtualTime { orderService.getOrder() }
+                .consumeNextWith {
+                    verify(exactly = 1) { prospectRepository.findAll() }
+                }.verifyComplete()
+
+    }
 }

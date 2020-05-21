@@ -7,6 +7,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Mono
+import reactor.test.StepVerifier.withVirtualTime
 
 class OrderServiceTest {
     private val prospect = Prospect("itemName", 3, "paymentMode", "email", "PLACED")
@@ -18,11 +19,13 @@ class OrderServiceTest {
     @Test
     fun `should save order details to mongo`() {
         val orderDetails = OrderDetails("itemName", 3, "paymentMode", "email")
-        orderService.order(orderDetails)
+        orderService.order(Mono.just(orderDetails))
+        val prospect = Prospect("itemName", 3, "paymentMode", "email", "PLACED")
 
-        verify(exactly = 1) {
-            prospectRepository.save(Prospect("itemName", 3, "paymentMode", "email", "PLACED"))
-        }
+        withVirtualTime { orderService.order(orderDetails = Mono.just(orderDetails)) }
+                .consumeNextWith {
+                    verify(exactly = 1) { prospectRepository.save(prospect) }
+                }.verifyComplete()
     }
 
 }

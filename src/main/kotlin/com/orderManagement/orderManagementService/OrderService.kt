@@ -7,13 +7,15 @@ import reactor.core.publisher.Mono
 
 @Component
 class OrderService(val prospectRepository: ProspectRepository) {
-    fun order(orderDetails: OrderDetails): Mono<OrderResponse> {
-        val itemName = orderDetails.itemName
-        val quantity = orderDetails.quantity
-        val paymentMode = orderDetails.paymentMode
-        val email = orderDetails.email
-
-        return prospectRepository.save(Prospect(itemName, quantity, paymentMode, email, "PLACED"))
-                .map { OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, "PLACED") }
+    fun order(orderDetails: Mono<OrderDetails>): Mono<OrderResponse> {
+        return orderDetails.flatMap {
+            val itemName = it.itemName
+            val quantity = it.quantity
+            val paymentMode = it.paymentMode
+            val email = it.email
+            prospectRepository.save(Prospect(itemName, quantity, paymentMode, email, "PLACED"))
+        }.map {
+            OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, "PLACED")
+        }
     }
 }

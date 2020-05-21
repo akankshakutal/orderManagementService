@@ -22,7 +22,7 @@ class OrderControllerAdviceTest(
 
     @Test
     fun `should return error response for Invalid Quantity Exception`() {
-        val orderDetails = OrderDetails("itemName", -3, "paymentMode", "email")
+        val orderDetails = OrderDetails("itemName", -3, PaymentMode.NET_BANKING, "email")
 
         Mockito.`when`(orderValidator.validate(any())).thenReturn(Mono.error(InvalidQuantityException()))
         Mockito.`when`(orderService.order(any())).thenReturn(Mono.empty())

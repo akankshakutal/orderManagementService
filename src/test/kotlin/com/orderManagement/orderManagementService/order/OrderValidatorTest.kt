@@ -8,7 +8,7 @@ class OrderValidatorTest {
 
     @Test
     fun `should throw invalid quantity exception`() {
-        val orderDetails = OrderDetails("Laptop", -1, "NET_BANKING", "PLACED")
+        val orderDetails = OrderDetails("Laptop", -1, PaymentMode.NET_BANKING, "Email")
         assertThrows<InvalidQuantityException> {
             orderValidator.validate(orderDetails)
         }

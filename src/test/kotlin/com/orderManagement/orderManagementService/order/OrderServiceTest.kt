@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono
 import reactor.test.StepVerifier.withVirtualTime
 
 class OrderServiceTest {
-    private val prospect = Prospect("itemName", 3, "paymentMode", "email", "PLACED")
+    private val prospect = Prospect("itemName", 3, PaymentMode.NET_BANKING.name, "email", "PLACED")
     private val prospectRepository = mockk<ProspectRepository> {
         every { save<Prospect>(any()) } returns Mono.just(prospect)
     }
@@ -18,9 +18,9 @@ class OrderServiceTest {
 
     @Test
     fun `should save order details to mongo`() {
-        val orderDetails = OrderDetails("itemName", 3, "paymentMode", "email")
+        val orderDetails = OrderDetails("itemName", 3, PaymentMode.CASH_ON_DELIVERY, "email")
         orderService.order(Mono.just(orderDetails))
-        val prospect = Prospect("itemName", 3, "paymentMode", "email", "PLACED")
+        val prospect = Prospect("itemName", 3, PaymentMode.CASH_ON_DELIVERY.name, "email", "PLACED")
 
         withVirtualTime { orderService.order(orderDetails = Mono.just(orderDetails)) }
                 .consumeNextWith {

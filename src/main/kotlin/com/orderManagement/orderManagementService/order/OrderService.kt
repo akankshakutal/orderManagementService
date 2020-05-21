@@ -13,9 +13,9 @@ class OrderService(val prospectRepository: ProspectRepository) {
             val quantity = it.quantity
             val paymentMode = it.paymentMode
             val email = it.email
-            prospectRepository.save(Prospect(itemName, quantity, paymentMode, email, "PLACED"))
+            prospectRepository.save(Prospect(itemName, quantity, paymentMode.name, email, "PLACED"))
         }.map {
-            OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, "PLACED")
+            OrderResponse(it.itemName, it.quantity, PaymentMode.valueOf(it.paymentMode), it.email, "PLACED")
         }
     }
 }

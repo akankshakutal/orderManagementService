@@ -18,7 +18,7 @@ class OrderControllerTest(@Autowired val testClient: WebTestClient) {
     @MockBean
     lateinit var orderValidator: OrderValidator
 
-    private val orderDetails = OrderDetails("itemName", 3, "paymentMode", "email")
+    private val orderDetails = OrderDetails("itemName", 3, PaymentMode.NET_BANKING, "email")
 
     @Test
     fun `should respond with 200 OK`() {

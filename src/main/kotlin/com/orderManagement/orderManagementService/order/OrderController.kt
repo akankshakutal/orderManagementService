@@ -1,4 +1,4 @@
-package com.orderManagement.orderManagementService
+package com.orderManagement.orderManagementService.order
 
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

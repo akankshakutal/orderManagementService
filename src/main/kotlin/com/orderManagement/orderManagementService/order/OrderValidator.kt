@@ -1,4 +1,4 @@
-package com.orderManagement.orderManagementService
+package com.orderManagement.orderManagementService.order
 
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono

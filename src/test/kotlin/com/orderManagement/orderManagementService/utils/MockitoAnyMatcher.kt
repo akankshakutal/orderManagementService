@@ -1,4 +1,4 @@
-package com.orderManagement.orderManagementService
+package com.orderManagement.orderManagementService.utils
 
 import org.mockito.Mockito
 

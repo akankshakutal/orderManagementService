@@ -1,4 +1,4 @@
-package com.orderManagement.orderManagementService
+package com.orderManagement.orderManagementService.order
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

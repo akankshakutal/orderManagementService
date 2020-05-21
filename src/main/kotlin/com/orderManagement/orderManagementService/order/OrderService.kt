@@ -1,4 +1,4 @@
-package com.orderManagement.orderManagementService
+package com.orderManagement.orderManagementService.order
 
 import com.orderManagement.orderManagementService.prospect.Prospect
 import com.orderManagement.orderManagementService.prospect.ProspectRepository

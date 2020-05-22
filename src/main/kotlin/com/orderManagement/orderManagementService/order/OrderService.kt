@@ -16,13 +16,13 @@ class OrderService(val prospectRepository: ProspectRepository) {
             val email = it.email
             prospectRepository.save(Prospect(itemName, quantity, paymentMode, email, Status.DELIVERED))
         }.map {
-            OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, Status.DELIVERED)
+            OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, it.status, it.id)
         }
     }
 
     fun getOrder(): Flux<OrderResponse> {
         return prospectRepository
                 .findAll()
-                .map { OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, it.status) }
+                .map { OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, it.status, it.id) }
     }
 }

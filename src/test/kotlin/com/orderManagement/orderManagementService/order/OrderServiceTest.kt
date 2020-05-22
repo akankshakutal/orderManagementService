@@ -20,9 +20,11 @@ class OrderServiceTest {
 
     @Test
     fun `should save order details to mongo`() {
+        prospect.id = "abcd1234"
         val orderDetails = OrderDetails("itemName", 3, PaymentMode.CASH_ON_DELIVERY, "email")
         orderService.order(Mono.just(orderDetails))
         val prospect = Prospect("itemName", 3, PaymentMode.CASH_ON_DELIVERY, "email", Status.DELIVERED)
+        prospect.id = "abcd1234"
 
         withVirtualTime { orderService.order(orderDetails = Mono.just(orderDetails)) }
                 .consumeNextWith {
@@ -32,6 +34,7 @@ class OrderServiceTest {
 
     @Test
     fun `should get all the orders`() {
+        prospect.id = "abcd1234"
         withVirtualTime { orderService.getOrder() }
                 .consumeNextWith {
                     verify(exactly = 1) { prospectRepository.findAll() }

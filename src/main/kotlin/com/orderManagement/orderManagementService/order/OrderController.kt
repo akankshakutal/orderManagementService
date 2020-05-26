@@ -1,9 +1,6 @@
 package com.orderManagement.orderManagementService.order
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -19,5 +16,10 @@ class OrderController(val orderService: OrderService, val orderValidator: OrderV
     @GetMapping("/get/order")
     fun getOffer(): Flux<OrderResponse> {
         return orderService.getOrder()
+    }
+
+    @GetMapping("/get/order/{orderId}")
+    fun getOfferFor(@PathVariable orderId: String): Mono<OrderResponse> {
+        return orderService.getOrderDetailsFor(orderId)
     }
 }

@@ -64,4 +64,20 @@ class OrderControllerTest(@Autowired val testClient: WebTestClient) {
 
         Mockito.verify(orderService, Mockito.times(1)).getOrder()
     }
+
+    @Test
+    fun `should return specific order details with 200 ok`() {
+        val orderId = "1234"
+        val orderResponse = OrderResponse("itemName", 2, PaymentMode.NET_BANKING, "email", Status.PLACED, orderId)
+        Mockito.`when`(orderService.getOrderDetailsFor(orderId)).thenReturn(Mono.just(orderResponse))
+
+        testClient.get()
+                .uri("/get/order/$orderId")
+                .exchange()
+                .expectStatus().isOk
+                .expectBody()
+                .json(jacksonObjectMapper().writeValueAsString(orderResponse))
+
+        Mockito.verify(orderService, Mockito.times(1)).getOrderDetailsFor(orderId)
+    }
 }

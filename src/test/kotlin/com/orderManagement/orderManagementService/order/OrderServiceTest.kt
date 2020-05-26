@@ -12,33 +12,44 @@ import reactor.test.StepVerifier.withVirtualTime
 
 class OrderServiceTest {
     private val prospect = Prospect("itemName", 3, PaymentMode.NET_BANKING, "email", Status.PLACED)
-    private val prospectRepository = mockk<ProspectRepository> {
-        every { save<Prospect>(any()) } returns Mono.just(prospect)
-        every { findAll() } returns Flux.just(prospect)
-    }
+            .apply { id = "abcd1234" }
+    private val prospectRepository = mockk<ProspectRepository>()
     private val orderService = OrderService(prospectRepository)
 
     @Test
     fun `should save order details to mongo`() {
-        prospect.id = "abcd1234"
-        val orderDetails = OrderDetails("itemName", 3, PaymentMode.CASH_ON_DELIVERY, "email")
-        orderService.order(Mono.just(orderDetails))
-        val prospect = Prospect("itemName", 3, PaymentMode.CASH_ON_DELIVERY, "email", Status.DELIVERED)
-        prospect.id = "abcd1234"
+        every { prospectRepository.save<Prospect>(any()) } returns Mono.just(prospect)
+        val orderDetails = OrderDetails("itemName", 3, PaymentMode.NET_BANKING, "email")
 
-        withVirtualTime { orderService.order(orderDetails = Mono.just(orderDetails)) }
-                .consumeNextWith {
-                    verify(exactly = 1) { prospectRepository.save(prospect) }
-                }.verifyComplete()
+        val order = orderService.order(Mono.just(orderDetails))
+
+        withVirtualTime { order }
+                .consumeNextWith { verify { prospectRepository.save(prospect) } }
+                .verifyComplete()
     }
 
     @Test
-    fun `should get all the orders`() {
-        prospect.id = "abcd1234"
-        withVirtualTime { orderService.getOrder() }
-                .consumeNextWith {
-                    verify(exactly = 1) { prospectRepository.findAll() }
-                }.verifyComplete()
+    fun `should call prospectRepository`() {
+        every { prospectRepository.findAll() } returns Flux.just(prospect)
 
+        val orderDetails = orderService.getOrder()
+
+        withVirtualTime { orderDetails }
+                .consumeNextWith { verify { prospectRepository.findAll() } }
+                .verifyComplete()
+    }
+
+    @Test
+    fun `should get order details for given orderId`() {
+        val orderId = "abcd1234"
+        every { prospectRepository.save<Prospect>(any()) } returns Mono.just(prospect)
+        every { prospectRepository.findById(any<String>()) } returns Mono.just(prospect)
+        prospectRepository.save(prospect).block()
+
+        val orderDetails = orderService.getOrderDetailsFor(orderId)
+
+        withVirtualTime { orderDetails }
+                .consumeNextWith { verify { prospectRepository.findById(orderId) } }
+                .verifyComplete()
     }
 }

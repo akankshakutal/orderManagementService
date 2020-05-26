@@ -14,7 +14,7 @@ class OrderService(val prospectRepository: ProspectRepository) {
             val quantity = it.quantity
             val paymentMode = it.paymentMode
             val email = it.email
-            prospectRepository.save(Prospect(itemName, quantity, paymentMode, email, Status.DELIVERED))
+            prospectRepository.save(Prospect(itemName, quantity, paymentMode, email, Status.PLACED))
         }.map {
             OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, it.status, it.id)
         }
@@ -23,6 +23,12 @@ class OrderService(val prospectRepository: ProspectRepository) {
     fun getOrder(): Flux<OrderResponse> {
         return prospectRepository
                 .findAll()
+                .map { OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, it.status, it.id) }
+    }
+
+    fun getOrderDetailsFor(orderId: String): Mono<OrderResponse> {
+        return prospectRepository
+                .findById(orderId)
                 .map { OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, it.status, it.id) }
     }
 }

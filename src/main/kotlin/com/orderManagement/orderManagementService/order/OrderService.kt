@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
+import java.util.*
 
 @Component
 class OrderService(
@@ -23,7 +25,9 @@ class OrderService(
             prospectRepository.save(prospect)
         }.map {
             val event = Event(it.id, it.itemName, it.quantity, it.paymentMode, it.email)
-            kafkaTopicProducer.produce(event, topic, "abcd1234")
+            kafkaTopicProducer.produce(event, topic, UUID.randomUUID().toString())
+                    .subscribeOn(Schedulers.elastic())
+                    .subscribe()
             OrderResponse(it.itemName, it.quantity, it.paymentMode, it.email, it.status, it.id)
         }
     }

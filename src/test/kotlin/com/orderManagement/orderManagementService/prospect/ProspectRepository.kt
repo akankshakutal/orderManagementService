@@ -3,6 +3,7 @@ package com.orderManagement.orderManagementService.prospect
 import com.orderManagement.orderManagementService.order.PaymentMode
 import com.orderManagement.orderManagementService.order.Status
 import io.kotlintest.shouldBe
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
@@ -13,6 +14,11 @@ import org.springframework.test.context.ActiveProfiles
 class ProspectRepositoryTest {
     @Autowired
     lateinit var prospectRepository: ProspectRepository
+
+    @AfterEach
+    internal fun tearDown() {
+        prospectRepository.deleteAll()
+    }
 
     @Test
     fun `save prospect`() {

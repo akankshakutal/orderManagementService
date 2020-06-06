@@ -19,11 +19,8 @@ class OrderService(
 
     fun order(orderDetails: Mono<OrderDetails>): Mono<OrderResponse> {
         return orderDetails.flatMap {
-            val itemName = it.itemName
-            val quantity = it.quantity
-            val paymentMode = it.paymentMode
-            val email = it.email
-            prospectRepository.save(Prospect(itemName, quantity, paymentMode, email, Status.PLACED))
+            val prospect = Prospect(it.itemName, it.quantity, it.paymentMode, it.email, Status.PLACED)
+            prospectRepository.save(prospect)
         }.map {
             val event = Event(it.id, it.itemName, it.quantity, it.paymentMode, it.email)
             kafkaTopicProducer.produce(event, topic, "abcd1234")

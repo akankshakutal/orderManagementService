@@ -1,10 +1,12 @@
 package com.orderManagement.orderManagementService.order
 
+import com.orderManagement.orderManagementService.kafka.KafkaTopicProducer
 import com.orderManagement.orderManagementService.prospect.Prospect
 import com.orderManagement.orderManagementService.prospect.ProspectRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -14,7 +16,15 @@ class OrderServiceTest {
     private val prospect = Prospect("itemName", 3, PaymentMode.NET_BANKING, "email", Status.PLACED)
             .apply { id = "abcd1234" }
     private val prospectRepository = mockk<ProspectRepository>()
-    private val orderService = OrderService(prospectRepository)
+    private val kafkaTopicProducer = mockk<KafkaTopicProducer>() {
+        every { produce(any(), any(), any()) } returns Mono.empty()
+    }
+    private val orderService = OrderService(prospectRepository, kafkaTopicProducer)
+
+    @BeforeEach
+    fun setUp() {
+        orderService.topic = "orderDetails"
+    }
 
     @Test
     fun `should save order details to mongo`() {

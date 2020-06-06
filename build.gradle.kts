@@ -26,6 +26,7 @@ dependencies {
 	implementation("io.micrometer:micrometer-registry-prometheus")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("io.projectreactor.kafka:reactor-kafka:1.1.1.RELEASE")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
@@ -33,6 +34,7 @@ dependencies {
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("io.mockk:mockk:1.10.0")
 	testImplementation("io.kotlintest:kotlintest-runner-junit5:3.1.10")
+	testImplementation("org.springframework.kafka:spring-kafka-test:2.2.4.RELEASE")
 }
 
 tasks.withType<Test> {

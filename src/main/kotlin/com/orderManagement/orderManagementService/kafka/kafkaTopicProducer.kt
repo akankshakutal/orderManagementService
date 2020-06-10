@@ -13,7 +13,7 @@ import java.util.*
 @Component
 class KafkaTopicProducer(val kafkaSender: KafkaSender<PartitionIdentifier, Event>) {
 
-    fun produce(data: Event, topicName: String, partitionIdentifier: String = ""): Mono<Boolean> {
+    fun produce(data: Event, topicName: String, partitionIdentifier: String): Mono<Boolean> {
         return Mono.subscriberContext().flatMap {
             val headers1 = createProducerRecordWithHeaders(data, topicName, partitionIdentifier)
             val senderRecord = SenderRecord.create(headers1, UUID.randomUUID().toString())

@@ -1,5 +1,6 @@
 package com.orderManagement.orderManagementService.kafka
 
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,9 +15,9 @@ class Configuration {
     fun kafkaSender(kafkaConfig: KafkaConfig): KafkaSender<PartitionIdentifier, Event>? {
         val props = HashMap<String, Any>()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaConfig.kafkaUrl
-        props[ProducerConfig.CLIENT_ID_CONFIG] = kafkaConfig.clientId + UUID.randomUUID().toString()
+        props[ProducerConfig.CLIENT_ID_CONFIG] = kafkaConfig.clientId
         props[ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION] = 1
-        props[ProducerConfig.ACKS_CONFIG] = kafkaConfig.ackConfig
+        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG ] = kafkaConfig.ackConfig
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = PartitionIdSerializer::class.java
         props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = EventSerializer::class.java
 

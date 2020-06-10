@@ -13,7 +13,4 @@ class KafkaConfig {
 
     @Value("\${spring.kafka.admin.client-id}")
     lateinit var clientId: String
-
-    @Value("\${spring.kafka.template.default-topic}")
-    lateinit var topic: String
 }

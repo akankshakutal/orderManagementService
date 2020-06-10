@@ -7,9 +7,4 @@ class PartitionIdSerializer<PartitionIdentifier> : Serializer<PartitionIdentifie
     override fun serialize(topic: String?, data: PartitionIdentifier?): ByteArray {
         return ObjectMapper().writeValueAsBytes(data)
     }
-
-    override fun configure(configs: MutableMap<String, *>?, isKey: Boolean) {
-    }
-
-    override fun close() {}
 }

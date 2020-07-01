@@ -31,11 +31,9 @@ class KafkaTopicProducer(val kafkaSender: KafkaSender<PartitionIdentifier, Event
 }
 
 data class Event(
-        val partitionIdentifier: String,
-        val itemName: String,
-        val quantity: Int,
+        val orderId: String,
         val paymentMode: PaymentMode,
-        val email: String
+        val amount: Int
 )
 
 data class PartitionIdentifier(val id: String)

@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 import reactor.test.StepVerifier.withVirtualTime
 
 class OrderServiceTest {
-    private val prospect = Prospect("itemName", 3, PaymentMode.NET_BANKING, "email", Status.PLACED)
+    private val prospect = Prospect("itemName", 3, 3000, PaymentMode.NET_BANKING, "email", Status.PLACED)
             .apply { id = "abcd1234" }
     private val prospectRepository = mockk<ProspectRepository>()
     private val kafkaTopicProducer = mockk<KafkaTopicProducer>() {

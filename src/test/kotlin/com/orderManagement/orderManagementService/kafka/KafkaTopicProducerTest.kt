@@ -21,7 +21,7 @@ class KafkaTopicProducerTest {
     @Test
     fun `should return the result`() {
         val slot = slot<Mono<SenderRecord<PartitionIdentifier, Event, String>>>()
-        val event = Event("partitionIdentifier", "itemName", 4, PaymentMode.NET_BANKING, "email")
+        val event = Event("partitionIdentifier", PaymentMode.NET_BANKING, 1000)
         val kafkaTopicProducer = KafkaTopicProducer(kafkaSender)
 
         kafkaTopicProducer.produce(event, "topic", "abcd1234").block()

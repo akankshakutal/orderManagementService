@@ -22,7 +22,7 @@ class ProspectRepositoryTest {
 
     @Test
     fun `save prospect`() {
-        val prospect = Prospect("itemName", 3, PaymentMode.UPI, "email", Status.PLACED)
+        val prospect = Prospect("itemName", 3, 3000, PaymentMode.UPI, "email", Status.PLACED)
         prospectRepository.save(prospect).block()
 
         val savedProspect = prospectRepository.findAll().blockFirst()

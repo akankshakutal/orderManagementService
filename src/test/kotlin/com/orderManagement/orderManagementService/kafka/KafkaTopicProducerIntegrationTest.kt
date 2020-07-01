@@ -23,7 +23,7 @@ class KafkaTopicProducerIntegrationTest(@Autowired val testKafkaConsumer: TestKa
 
     @Test
     fun `should produce event`() {
-        val event = Event("Id", "itemName", 3, PaymentMode.NET_BANKING, "email")
+        val event = Event("Id", PaymentMode.NET_BANKING, 1000)
 
         kafkaTopicProducer.produce(event, "orderDetails", "abcd1234").subscribe()
 

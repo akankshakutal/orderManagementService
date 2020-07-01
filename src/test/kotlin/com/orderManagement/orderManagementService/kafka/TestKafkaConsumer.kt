@@ -12,7 +12,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import org.springframework.test.context.ActiveProfiles
 import reactor.core.publisher.Mono
-import reactor.core.publisher.toMono
 import reactor.kafka.receiver.KafkaReceiver
 import reactor.kafka.receiver.ReceiverOptions
 import reactor.util.context.Context
@@ -35,7 +34,7 @@ class TestKafkaConsumer : ApplicationRunner {
                 .flatMapSequential { receiverRecord ->
                     process(receiverRecord.value() as Event)
                             .subscriberContext(getContextFromKafkaHeader(receiverRecord.headers()))
-                            .flatMap { receiverRecord.receiverOffset().toMono() }
+                            .flatMap { Mono.just(receiverRecord.receiverOffset()) }
                 }
                 .flatMap { it.commit() }
                 .subscribe()
@@ -80,7 +79,7 @@ class TestKafkaConsumer : ApplicationRunner {
 class EventDeserializer : Deserializer<Event> {
 
     override fun deserialize(topic: String?, data: ByteArray): Event {
-        return jacksonObjectMapper().readValue<Event>(data)
+        return jacksonObjectMapper().readValue(data)
     }
 
 }

@@ -24,7 +24,7 @@ class OrderControllerTest(@Autowired val testClient: WebTestClient) {
 
     @Test
     fun `should save order details and return it with 200 ok`() {
-        val orderResponse = OrderResponse("", 2, PaymentMode.NET_BANKING, "email", Status.PLACED, "orderId")
+        val orderResponse = OrderResponse("laptop", 2, PaymentMode.NET_BANKING, "email", Status.PLACED, "orderId", 1000)
         Mockito.`when`(orderService.order(any())).thenReturn(Mono.just(orderResponse))
 
         testClient.post()
@@ -52,7 +52,7 @@ class OrderControllerTest(@Autowired val testClient: WebTestClient) {
 
     @Test
     fun `should return all order details with 200 ok`() {
-        val orderResponse = OrderResponse("", 2, PaymentMode.NET_BANKING, "email", Status.PLACED, "orderId")
+        val orderResponse = OrderResponse("laptop", 2, PaymentMode.NET_BANKING, "email", Status.PLACED, "orderId", 1000)
         Mockito.`when`(orderService.getOrder()).thenReturn(Flux.just(orderResponse, orderResponse))
 
         testClient.get()
@@ -68,7 +68,7 @@ class OrderControllerTest(@Autowired val testClient: WebTestClient) {
     @Test
     fun `should return specific order details with 200 ok`() {
         val orderId = "1234"
-        val orderResponse = OrderResponse("itemName", 2, PaymentMode.NET_BANKING, "email", Status.PLACED, orderId)
+        val orderResponse = OrderResponse("itemName", 2, PaymentMode.NET_BANKING, "email", Status.PLACED, orderId, 1000)
         Mockito.`when`(orderService.getOrderDetailsFor(orderId)).thenReturn(Mono.just(orderResponse))
 
         testClient.get()

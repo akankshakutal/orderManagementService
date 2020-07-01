@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 
 @Document(collection = "orderDetails")
-data class Prospect(val itemName: String, val quantity: Int, val paymentMode: PaymentMode, val email: String, val status: Status) {
+data class Prospect(val itemName: String, val quantity: Int, val cost: Int, val paymentMode: PaymentMode, val email: String, val status: Status) {
     @Id
     lateinit var id: String
 }

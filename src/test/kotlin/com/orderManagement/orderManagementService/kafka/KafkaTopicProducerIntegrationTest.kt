@@ -2,6 +2,7 @@ package com.orderManagement.orderManagementService.kafka
 
 import com.orderManagement.orderManagementService.order.PaymentMode
 import io.kotlintest.shouldBe
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit
 @SpringBootTest
 @ExtendWith(SpringExtension::class)
 @EmbeddedKafka(controlledShutdown = true, brokerProperties = ["log.dir=out/embedded-kafka/orderService"])
+@Disabled
 class KafkaTopicProducerIntegrationTest(@Autowired val testKafkaConsumer: TestKafkaConsumer) {
     @Autowired
     private lateinit var kafkaTopicProducer: KafkaTopicProducer
@@ -30,5 +32,6 @@ class KafkaTopicProducerIntegrationTest(@Autowired val testKafkaConsumer: TestKa
         val receivedMessages = testKafkaConsumer.messageList
 
         receivedMessages.size shouldBe 1
+        receivedMessages[0] shouldBe event
     }
 }

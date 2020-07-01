@@ -33,6 +33,7 @@ dependencies {
 	}
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("io.mockk:mockk:1.10.0")
+	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 	testImplementation("io.kotlintest:kotlintest-runner-junit5:3.1.10")
 	testImplementation("org.springframework.kafka:spring-kafka-test:2.2.4.RELEASE")
 }

@@ -11,6 +11,12 @@ class KafkaConfig {
     @Value("\${spring.kafka.listener.ack-mode}")
     lateinit var ackConfig: String
 
-    @Value("\${spring.kafka.admin.client-id}")
+    @Value("\${spring.kafka.consumer.client-id}")
     lateinit var clientId: String
+
+    @Value("\${spring.kafka.consumer.properties.topic}")
+    lateinit var topic: String
+
+    @Value("\${spring.kafka.consumer.group-id}")
+    lateinit var groupId: String
 }

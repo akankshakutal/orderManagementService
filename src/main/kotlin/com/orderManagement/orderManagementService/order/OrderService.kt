@@ -16,7 +16,7 @@ class OrderService(
         val prospectRepository: ProspectRepository,
         val kafkaTopicProducer: KafkaTopicProducer
 ) {
-    @Value("\${spring.kafka.template.default-topic}")
+    @Value("\${spring.kafka.producer.properties.topic}")
     lateinit var topic: String
 
     private val COST_OF_ONE_ITEM = 1000

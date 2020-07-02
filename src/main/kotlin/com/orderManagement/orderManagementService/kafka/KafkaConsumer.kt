@@ -13,14 +13,14 @@ import reactor.util.context.Context
 import java.util.concurrent.CountDownLatch
 
 @Component
-class KafkaConsumer(val kafkaReceiver: KafkaReceiver<PartitionIdentifier, Event>,
+class KafkaConsumer(val kafkaReceiver: KafkaReceiver<PartitionIdentifier, PaymentEvent>,
                     val prospectRepository: ProspectRepository) : ApplicationRunner {
     var countDownLatch = CountDownLatch(1)
 
     override fun run(args: ApplicationArguments?) {
         kafkaReceiver.receive()
                 .flatMapSequential { receiverRecord ->
-                    process(receiverRecord.value() as Event)
+                    process(receiverRecord.value() as PaymentEvent)
                             .subscriberContext(getContextFromKafkaHeader(receiverRecord.headers()))
                             .flatMap { Mono.just(receiverRecord.receiverOffset()) }
                 }
@@ -41,7 +41,7 @@ class KafkaConsumer(val kafkaReceiver: KafkaReceiver<PartitionIdentifier, Event>
         return context
     }
 
-    fun process(message: Event): Mono<Boolean> {
+    fun process(message: PaymentEvent): Mono<Boolean> {
         return prospectRepository.findById(message.orderId)
                 .flatMap { prospect ->
                     prospect.status = Status.DELIVERED
@@ -54,3 +54,5 @@ class KafkaConsumer(val kafkaReceiver: KafkaReceiver<PartitionIdentifier, Event>
         countDownLatch = CountDownLatch(count)
     }
 }
+
+data class PaymentEvent(val orderId: String, val amount: Int, val status: String)

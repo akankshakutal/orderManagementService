@@ -38,7 +38,7 @@ class KafkaConsumerIntegrationTest(@Autowired val testKafkaProducer: TestKafkaPr
         prospectRepository.save(prospect).block()
 
         kafkaConsumer.setCountDownLatch(1)
-        val event = Event("abcd1234", PaymentMode.NET_BANKING, 2000)
+        val event = PaymentEvent("abcd1234",1000,"PAID")
 
         testKafkaProducer.produce(event, "paymentDetails", "abcd1234").subscribe()
 

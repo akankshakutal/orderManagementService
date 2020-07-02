@@ -14,7 +14,7 @@ import reactor.kafka.receiver.KafkaReceiver
 
 class KafkaConsumerTest {
     private val prospectRepository = mockk<ProspectRepository>()
-    private val kafkaReceiver = mockk<KafkaReceiver<PartitionIdentifier, Event>> {
+    private val kafkaReceiver = mockk<KafkaReceiver<PartitionIdentifier, PaymentEvent>> {
         every { receive() } returns Flux.empty()
     }
 
@@ -34,7 +34,7 @@ class KafkaConsumerTest {
         every { prospectRepository.findById(any<String>()) } returns Mono.just(prospectBeforeSave)
         val kafkaTopicConsumer = KafkaConsumer(kafkaReceiver, prospectRepository)
 
-        kafkaTopicConsumer.process(Event("abcd1234", PaymentMode.CASH_ON_DELIVERY, 2000))
+        kafkaTopicConsumer.process(PaymentEvent("abcd1234",2000,"PAID"))
 
         verify(exactly = 1) { prospectRepository.findById("abcd1234") }
     }

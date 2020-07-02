@@ -17,16 +17,16 @@ import java.util.*
 class Configuration {
 
     @Bean
-    fun kafkaReceiver(kafkaConfig: KafkaConfig): KafkaReceiver<PartitionIdentifier, Event> {
+    fun kafkaReceiver(kafkaConfig: KafkaConfig): KafkaReceiver<PartitionIdentifier, PaymentEvent> {
         val properties = mutableMapOf<String, Any>(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to kafkaConfig.kafkaUrl,
                 ConsumerConfig.CLIENT_ID_CONFIG to kafkaConfig.clientId,
                 ConsumerConfig.GROUP_ID_CONFIG to kafkaConfig.groupId,
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to PartitionIdDeserializer::class.java,
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to kafkaConfig.ackConfig,
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to EventDeserializer::class.java
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to PaymentEventDeserializer::class.java
         )
-        val receiverOptions = ReceiverOptions.create<PartitionIdentifier, Event>(properties)
+        val receiverOptions = ReceiverOptions.create<PartitionIdentifier, PaymentEvent>(properties)
                 .subscription(listOf(kafkaConfig.topic))
 
         return KafkaReceiver.create(receiverOptions)
@@ -51,6 +51,6 @@ class PartitionIdDeserializer : Deserializer<PartitionIdentifier> {
     override fun deserialize(topic: String?, data: ByteArray): PartitionIdentifier = jacksonObjectMapper().readValue(data)
 }
 
-class EventDeserializer : Deserializer<Event> {
-    override fun deserialize(topic: String?, data: ByteArray): Event = jacksonObjectMapper().readValue(data)
+class PaymentEventDeserializer : Deserializer<PaymentEvent> {
+    override fun deserialize(topic: String?, data: ByteArray): PaymentEvent = jacksonObjectMapper().readValue(data)
 }

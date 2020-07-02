@@ -1,5 +1,6 @@
 package com.orderManagement.orderManagementService.order
 
+import com.orderManagement.orderManagementService.kafka.Event
 import com.orderManagement.orderManagementService.kafka.KafkaTopicProducer
 import com.orderManagement.orderManagementService.prospect.Prospect
 import com.orderManagement.orderManagementService.prospect.ProspectRepository
@@ -39,7 +40,7 @@ class OrderServiceTest {
     }
 
     @Test
-    fun `should call prospectRepository`() {
+    fun `should get details of all orders`() {
         every { prospectRepository.findAll() } returns Flux.just(prospect)
 
         val orderDetails = orderService.getOrder()
@@ -61,5 +62,16 @@ class OrderServiceTest {
         withVirtualTime { orderDetails }
                 .consumeNextWith { verify { prospectRepository.findById(orderId) } }
                 .verifyComplete()
+    }
+
+    @Test
+    fun `should call kafka producer`() {
+        every { prospectRepository.save<Prospect>(any()) } returns Mono.just(prospect)
+        val orderDetails = OrderDetails("itemName", 3, PaymentMode.NET_BANKING, "email")
+
+        orderService.order(Mono.just(orderDetails)).block()
+        val event = Event("abcd1234", PaymentMode.NET_BANKING, 3000)
+
+        verify(exactly = 1) { kafkaTopicProducer.produce(event, "orderDetails", any()) }
     }
 }

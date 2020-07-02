@@ -17,7 +17,7 @@ class ProspectRepositoryTest {
 
     @AfterEach
     internal fun tearDown() {
-        prospectRepository.deleteAll()
+        prospectRepository.deleteAll().block()
     }
 
     @Test
@@ -26,6 +26,17 @@ class ProspectRepositoryTest {
         prospectRepository.save(prospect).block()
 
         val savedProspect = prospectRepository.findAll().blockFirst()
+
+        savedProspect shouldBe prospect
+    }
+
+    @Test
+    fun `should find document by orderId`() {
+        val prospect = Prospect("orderId", 2, 2000, PaymentMode.CASH_ON_DELIVERY, "email", Status.PLACED)
+                .apply { id = "abcd1234" }
+        prospectRepository.save(prospect).block()
+
+        val savedProspect = prospectRepository.findById("abcd1234").block()
 
         savedProspect shouldBe prospect
     }
